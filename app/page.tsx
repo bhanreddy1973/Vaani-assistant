@@ -4,19 +4,23 @@ import { useState } from "react";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
 import { KeypadChallenge } from "@/components/KeypadChallenge";
 import { CategoryPicker, type Category } from "@/components/CategoryPicker";
+import { AskQuestion } from "@/components/AskQuestion";
 import { getFormsByCategory } from "@/lib/forms/catalog";
 import { initialFlowState, transition } from "@/lib/flow";
 
 export default function HomePage() {
   const [flow, setFlow] = useState(initialFlowState);
+  const [asking, setAsking] = useState(false);
+
+  if (asking) {
+    return <AskQuestion onBack={() => setAsking(false)} />;
+  }
 
   if (flow.step === "welcome") {
     return (
       <WelcomeScreen
         onStart={() => setFlow((s) => transition(s, { type: "START" }))}
-        onAsk={() => {
-          /* T7.3 will wire the voice Q&A entry point here */
-        }}
+        onAsk={() => setAsking(true)}
       />
     );
   }
